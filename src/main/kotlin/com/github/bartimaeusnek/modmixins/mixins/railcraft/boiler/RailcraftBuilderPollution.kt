@@ -24,13 +24,11 @@ class RailcraftBuilderPollution {
     fun tick(x: Int, c: CallbackInfo) {
         if (this.isBurning)
             tile?.also {
-                val pollution =
-                        when (it) {
-                            is TileMultiBlock -> (tile as TileMultiBlock).components.size * 2
-                            is TileEngineSteamHobby -> 1
-                            else -> 2
-                        }
-                GT_Pollution.addPollution(this.tile!!.world.getChunkFromBlockCoords(this.tile!!.x, this.tile!!.z), pollution)
+                GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
+                    is TileMultiBlock -> it.components.size * 2
+                    is TileEngineSteamHobby -> 1
+                    else -> 2
+                })
             }
     }
 }
