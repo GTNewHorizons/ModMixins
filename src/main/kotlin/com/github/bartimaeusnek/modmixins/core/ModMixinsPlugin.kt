@@ -7,7 +7,6 @@ import org.spongepowered.asm.lib.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 import java.io.File
-import kotlin.collections.ArrayList
 
 class ModMixinsPlugin : IMixinConfigPlugin {
 
@@ -15,6 +14,27 @@ class ModMixinsPlugin : IMixinConfigPlugin {
         const val name = "ModMixinsPlugin"
         val log: Logger = LogManager.getLogger(name)
         var thermosTainted : Boolean = false
+
+        fun loadJar(jar : File?) {
+            try {
+                jar?.also{
+                    log.info("Attempting to load $it")
+                    ClassPreLoader.loadJar(it)
+                }
+            } catch (ignored: Exception) {
+            }
+        }
+
+        fun unloadJar(jar : File?) {
+            try {
+                jar?.also{
+                    log.info("Attempting to unload $it")
+                    ClassPreLoader.unloadJar(it)
+                }
+            } catch (ignored: Exception) {
+            }
+        }
+
     }
 
     init {
@@ -30,17 +50,21 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     }
 
     override fun onLoad(mixinPackage: String) {}
-    override fun getRefMapperConfig(): String? {
-        return null
-    }
+    override fun getRefMapperConfig() : String? = null
 
-    override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
-        return true
-    }
+    override fun shouldApplyMixin(targetClassName: String, mixinClassName: String) : Boolean = true
 
     override fun acceptTargets(myTargets: Set<String>, otherTargets: Set<String>) {}
     override fun getMixins(): List<String>? {
         val mixins: MutableList<String> = ArrayList()
+
+        val gtjar =
+                File(Launch.minecraftHome, "mods/").listFiles{ file ->
+                    file.nameWithoutExtension.contains("gregtech-5.09") && file.extension == ("jar")
+                }?.first()!!
+
+        loadJar(gtjar)
+
         MixinSets.values()
                 .filter(MixinSets::shouldBeLoaded)
                 .forEach {
@@ -49,6 +73,8 @@ class ModMixinsPlugin : IMixinConfigPlugin {
                     log.info("Loading modmixins plugin ${it.fixname} with mixins: {}", it.mixinClasses)
                     it.unloadJar()
                 }
+        unloadJar(gtjar)
+
         return mixins
     }
 
@@ -87,29 +113,9 @@ class ModMixinsPlugin : IMixinConfigPlugin {
         constructor(fixname: String, applyIf: () -> Boolean, jar: File?, mixinClasses : String) : this(fixname, applyIf, jar, arrayOf(mixinClasses))
         constructor(fixname: String, applyIf: () -> Boolean, mixinClasses : String) : this(fixname, applyIf,null, mixinClasses)
 
-        fun shouldBeLoaded() : Boolean {
-            return applyIf.invoke()
-        }
-
-        fun loadJar() {
-            try {
-                jar?.also{
-                    log.info("Attempting to load $it")
-                    ClassPreLoader.loadJar(it)
-                }
-            } catch (ignored: Exception) {
-            }
-        }
-
-        fun unloadJar() {
-            try {
-                jar?.also{
-                    log.info("Attempting to unload $it")
-                    ClassPreLoader.unloadJar(it)
-                }
-            } catch (ignored: Exception) {
-            }
-        }
+        fun shouldBeLoaded() : Boolean = applyIf()
+        fun loadJar() = loadJar(jar)
+        fun unloadJar() = unloadJar(jar)
     }
 
 }

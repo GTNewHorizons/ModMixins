@@ -1,7 +1,9 @@
 package com.github.bartimaeusnek.modmixins.main
 
 import com.github.bartimaeusnek.modmixins.core.LoadingConfig
+import com.github.bartimaeusnek.modmixins.main.ModMixinsMod.DEPENDENCIES
 import com.github.bartimaeusnek.modmixins.main.ModMixinsMod.MODID
+import com.github.bartimaeusnek.modmixins.main.ModMixinsMod.MODLANGUAGEADAPTER
 import com.github.bartimaeusnek.modmixins.main.ModMixinsMod.NAME
 import com.github.bartimaeusnek.modmixins.main.ModMixinsMod.VERSION
 import cpw.mods.fml.common.Loader
@@ -11,6 +13,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.Side
 import cpw.mods.fml.relauncher.SideOnly
+import gregtech.api.util.GT_ModHandler
 import gregtech.api.util.GT_Utility
 import ic2.api.item.IC2Items
 import mods.railcraft.common.blocks.RailcraftBlocks
@@ -20,15 +23,19 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
 import thaumcraft.api.ItemApi
-import thaumcraft.api.ThaumcraftApi
 
-
-@Mod(modid = MODID, version = VERSION, name = NAME, acceptableRemoteVersions = "*",
-        dependencies = "required-after:spongemixins@[1.1.0; required-after: forgelin;", modLanguageAdapter = "net.shadowfacts.forgelin.KotlinAdapter")
+@Suppress("UNUSED")
+@Mod(modid = MODID, version = VERSION, name = NAME, dependencies = DEPENDENCIES,
+     acceptableRemoteVersions = "*", modLanguageAdapter = MODLANGUAGEADAPTER)
 object ModMixinsMod {
     const val MODID = "ModMixins"
     const val VERSION = "0.0.1"
-    const val NAME = "ModMixins"
+    const val NAME = MODID
+    const val MODLANGUAGEADAPTER = "net.shadowfacts.forgelin.KotlinAdapter"
+    const val DEPENDENCIES = "required-after:spongemixins;" +
+                                    "required-after:forgelin;" +
+                                    "required-after:gregtech;"
+
 
     @Mod.EventHandler
     fun preinit(init : FMLPreInitializationEvent) {
@@ -46,33 +53,38 @@ object ModMixinsMod {
         {
             event?.itemStack?.also{
                 if (LoadingConfig.fixVanillaFurnacePollution){
+                    val furnacePollution = "Produces ${LoadingConfig.furnacePullution*20} Pollution/Second"
                     when {
-                        GT_Utility.areStacksEqual(event.itemStack, ItemStack(Blocks.furnace)) -> {
-                            event.toolTip.add("Produces ${LoadingConfig.furnacePullution*20} Pollution/Second")
+                        GT_Utility.areStacksEqual(it, ItemStack(Blocks.furnace)) -> {
+                            event.toolTip += furnacePollution
                         }
-                        GT_Utility.areStacksEqual(event.itemStack, IC2Items.getItem("ironFurnace")) -> {
-                            event.toolTip.add("Produces ${LoadingConfig.furnacePullution*20} Pollution/Second")
+                        GT_Utility.areStacksEqual(it, IC2Items.getItem("ironFurnace")) -> {
+                            event.toolTip += furnacePollution
                         }
                     }
-                    if (Loader.isModLoaded("thaumcraft"))
-                        if (GT_Utility.areStacksEqual(event.itemStack, ItemApi.getBlock("blockArcaneFurnace",0)))
-                            event.toolTip.add("Produces ${LoadingConfig.furnacePullution*20} Pollution/Second")
+                    if (Loader.isModLoaded("Thaumcraft"))
+                        if (GT_Utility.areStacksEqual(it, ItemApi.getBlock("blockStoneDevice",0)))
+                            event.toolTip += furnacePollution
+                    if (Loader.isModLoaded("thaumicbases"))
+                        if (GT_Utility.areStacksEqual(it, GT_ModHandler.getModItem("thaumicbases","advAlchFurnace",1,0)))
+                            event.toolTip += furnacePollution
                 }
                 if (LoadingConfig.fixRailcraftBoilerPollution && Loader.isModLoaded("Railcraft")) {
+                    val boilerPollution = "Produces 40 Pollution/Second"
+                    val steamEnginePollution = "Produces 20 Pollution/Second"
                     when {
-                        GT_Utility.areStacksEqual(event.itemStack, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal)) -> {
-                            event.toolTip.add("Produces 40 Pollution/Second")
+                        GT_Utility.areStacksEqual(it, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal)) -> {
+                            event.toolTip += boilerPollution
                         }
-                        GT_Utility.areStacksEqual(event.itemStack, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal)) -> {
-                            event.toolTip.add("Produces 40 Pollution/Second")
+                        GT_Utility.areStacksEqual(it, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_FLUID.ordinal)) -> {
+                            event.toolTip += boilerPollution
                         }
-                        GT_Utility.areStacksEqual(event.itemStack, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal)) -> {
-                            event.toolTip.add("Produces 20 Pollution/Second")
+                        GT_Utility.areStacksEqual(it, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.ENGINE_STEAM_HOBBY.ordinal)) -> {
+                            event.toolTip += steamEnginePollution
                         }
                     }
                 }
             }
         }
     }
-
 }

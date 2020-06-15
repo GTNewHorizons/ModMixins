@@ -11,6 +11,6 @@
     "credits": "mitchej123 for Hodgepodge",
     "logoFile": "",
     "screenshots": [],
-    "dependencies": ["required-after: forgelin;required-after: spongemixins@[1.1.0;"]
+    "dependencies": ["required-after: forgelin;required-after: spongemixins;"]
   }
 ]

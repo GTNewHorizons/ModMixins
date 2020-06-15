@@ -123,8 +123,8 @@ jar {
     from refMap
     manifest {
         attributes.put("TweakClass", "org.spongepowered.asm.launch.MixinTweaker")
-        //attributes.put("FMLCorePluginContainsFMLMod", true)
-        //attributes.put("ForceLoadAsMod", true)
+        attributes.put("FMLCorePluginContainsFMLMod", true)
+        attributes.put("ForceLoadAsMod", true)
         attributes.put("MixinConfigs", yourMixinConfig)
     }
 }
@@ -152,6 +152,7 @@ afterEvaluate {
 
 sourceSets {
     main {
+        //noinspection GrDeprecatedAPIUsage
         output.resourcesDir = output.classesDir
         ext.refMap = refMapForYourConfig
     }
