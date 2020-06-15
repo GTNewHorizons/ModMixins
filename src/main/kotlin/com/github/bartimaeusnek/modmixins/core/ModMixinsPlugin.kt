@@ -55,13 +55,19 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String) : Boolean = true
 
     override fun acceptTargets(myTargets: Set<String>, otherTargets: Set<String>) {}
+    fun getGTJar() : File? =
+         try {
+            File(Launch.minecraftHome, "mods/").listFiles{ file ->
+                file.nameWithoutExtension.contains("gregtech-5.09") && file.extension == ("jar")
+            }?.first()!!
+        } catch (_: Throwable) {
+            null
+        }
+
     override fun getMixins(): List<String>? {
         val mixins: MutableList<String> = ArrayList()
 
-        val gtjar =
-                File(Launch.minecraftHome, "mods/").listFiles{ file ->
-                    file.nameWithoutExtension.contains("gregtech-5.09") && file.extension == ("jar")
-                }?.first()!!
+        val gtjar = getGTJar()
 
         loadJar(gtjar)
 
@@ -90,7 +96,7 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     enum class MixinSets(val fixname: String, private val applyIf: () -> Boolean, private val jar: File?, val mixinClasses: Array<String>)
     {
         RAILCRAFT_BOILER_POLLUTION_FIX (
-                "Railcraft Boiler Pollution addition",
+                "Railcraft Boiler Pollution Fix",
                 { LoadingConfig.fixRailcraftBoilerPollution },
                 File(Launch.minecraftHome, "mods/${LoadingConfig.RailcraftJarName}"),
                 "railcraft.boiler.RailcraftBuilderPollution"),
@@ -108,10 +114,18 @@ class ModMixinsPlugin : IMixinConfigPlugin {
                 arrayOf(
                         "thaumcraft.tileentity.AlchemicalConstructPollutionAdder"
                 )
-        );
+        ),
+        EXPLOSION_POLLUTION_ADDITION(
+                "Explosion Pollution Fix",
+                { LoadingConfig.fixExplosionPollution},
+                arrayOf(
+                        "vanilla.world.ExplosionPollutionAdder"
+                )
+        )
+        ;
         constructor(fixname: String, applyIf: () -> Boolean, mixinClasses : Array<String>) : this(fixname, applyIf,null, mixinClasses)
-        constructor(fixname: String, applyIf: () -> Boolean, jar: File?, mixinClasses : String) : this(fixname, applyIf, jar, arrayOf(mixinClasses))
-        constructor(fixname: String, applyIf: () -> Boolean, mixinClasses : String) : this(fixname, applyIf,null, mixinClasses)
+        constructor(fixname: String, applyIf: () -> Boolean, jar: File?, mixinClass : String) : this(fixname, applyIf, jar, arrayOf(mixinClass))
+        constructor(fixname: String, applyIf: () -> Boolean, mixinClass : String) : this(fixname, applyIf,null, mixinClass)
 
         fun shouldBeLoaded() : Boolean = applyIf()
         fun loadJar() = loadJar(jar)

@@ -53,7 +53,7 @@ object ModMixinsMod {
         {
             event?.itemStack?.also{
                 if (LoadingConfig.fixVanillaFurnacePollution){
-                    val furnacePollution = "Produces ${LoadingConfig.furnacePullution*20} Pollution/Second"
+                    val furnacePollution = "Produces ${LoadingConfig.furnacePollution*20} Pollution/Second"
                     when {
                         GT_Utility.areStacksEqual(it, ItemStack(Blocks.furnace)) -> {
                             event.toolTip += furnacePollution

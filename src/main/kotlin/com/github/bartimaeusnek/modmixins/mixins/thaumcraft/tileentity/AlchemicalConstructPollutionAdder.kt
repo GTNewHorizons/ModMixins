@@ -14,6 +14,6 @@ import thaumcraft.common.tiles.TileAlchemyFurnace
 class AlchemicalConstructPollutionAdder : TileEntity() {
 
     @Inject(method = ["updateEntity"], at = [At(value = "FIELD", target = "thaumcraft/common/tiles/TileAlchemyFurnace.furnaceBurnTime:I", opcode = Opcodes.PUTFIELD)])
-    fun addPollution(c: CallbackInfo) = GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePullution)
+    fun addPollution(c: CallbackInfo) = GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePollution)
 
 }

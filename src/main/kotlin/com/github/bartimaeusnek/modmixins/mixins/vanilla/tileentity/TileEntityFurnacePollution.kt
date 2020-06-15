@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 class TileEntityFurnacePollution : TileEntity() {
 
     @Inject(method = ["updateEntity"], at = [At(value = "FIELD", target = "net/minecraft/tileentity/TileEntityFurnace.furnaceBurnTime:I", opcode = PUTFIELD)])
-    fun addPollution(c: CallbackInfo) = GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePullution)
+    fun addPollution(c: CallbackInfo) = GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePollution)
 
 }
