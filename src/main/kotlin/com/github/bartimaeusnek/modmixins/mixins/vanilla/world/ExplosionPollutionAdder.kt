@@ -26,6 +26,8 @@ class ExplosionPollutionAdder {
     var explosionZ = 0.0
 
     @Inject(method = ["doExplosionA"], at = [At(value = "TAIL")])
-    fun addExplosionPollution(x: CallbackInfo) = GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.explosionX.toInt(), this.explosionZ.toInt()), ceil(explosionSize * 333.334f).toInt())
-
+    fun addExplosionPollution(x: CallbackInfo) {
+        if (!this.worldObj!!.isRemote)
+            GT_Pollution.addPollution(this.worldObj.getChunkFromBlockCoords(this.explosionX.toInt(), this.explosionZ.toInt()), ceil(explosionSize * 333.334f).toInt())
+    }
 }

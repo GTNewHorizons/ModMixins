@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 @Mixin(value = [SteamBoiler::class], remap = false)
-class RailcraftBuilderPollution {
+class RailcraftBoilerPollution {
 
     @Shadow
     private var tile: RailcraftTileEntity? = null
@@ -24,10 +24,11 @@ class RailcraftBuilderPollution {
     fun tick(x: Int, c: CallbackInfo) {
         if (this.isBurning)
             tile?.also {
-                GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
-                    is TileMultiBlock -> it.components.size * 2
-                    is TileEngineSteamHobby -> 1
-                    else -> 2
+                if (!it.world.isRemote)
+                    GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
+                        is TileMultiBlock -> it.components.size * 2
+                        is TileEngineSteamHobby -> 1
+                        else -> 2
                 })
             }
     }

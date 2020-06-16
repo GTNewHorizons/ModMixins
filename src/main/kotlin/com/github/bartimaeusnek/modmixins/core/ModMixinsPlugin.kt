@@ -7,6 +7,7 @@ import org.spongepowered.asm.lib.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 import java.io.File
+import java.io.FileNotFoundException
 
 class ModMixinsPlugin : IMixinConfigPlugin {
 
@@ -19,9 +20,12 @@ class ModMixinsPlugin : IMixinConfigPlugin {
             try {
                 jar?.also{
                     log.info("Attempting to load $it")
+                    if (!jar.exists())
+                        throw FileNotFoundException()
                     ClassPreLoader.loadJar(it)
                 }
-            } catch (ignored: Exception) {
+            } catch (ex: Exception) {
+                log.catching(ex)
             }
         }
 
@@ -29,9 +33,12 @@ class ModMixinsPlugin : IMixinConfigPlugin {
             try {
                 jar?.also{
                     log.info("Attempting to unload $it")
+                    if (!jar.exists())
+                        throw FileNotFoundException()
                     ClassPreLoader.unloadJar(it)
                 }
-            } catch (ignored: Exception) {
+            } catch (ex: Exception) {
+                log.catching(ex)
             }
         }
 
@@ -96,10 +103,23 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     enum class MixinSets(val fixname: String, private val applyIf: () -> Boolean, private val jar: File?, val mixinClasses: Array<String>)
     {
         RAILCRAFT_BOILER_POLLUTION_FIX (
-                "Railcraft Boiler Pollution Fix",
+                "Railcraft Pollution Fix",
                 { LoadingConfig.fixRailcraftBoilerPollution },
                 File(Launch.minecraftHome, "mods/${LoadingConfig.RailcraftJarName}"),
-                "railcraft.boiler.RailcraftBuilderPollution"),
+                arrayOf(
+                    "railcraft.boiler.RailcraftBoilerPollution",
+                    "railcraft.tileentity.MultiOfenPollution",
+                    "railcraft.entity.RailcraftTunnleBorePollution"
+                )
+        ),
+        ROCKET_ADD_POLLUTION (
+                "Rocket Pollution Fix",
+                { LoadingConfig.fixRocketPollution },
+                File(Launch.minecraftHome, "mods/${LoadingConfig.GalacticraftJarName}"),
+                arrayOf(
+                        "galacticraft.entity.RocketPollutionAdder"
+                )
+        ),
         FURNACE_ADD_POLLUTION (
                 "Furnace Pollution Fix",
                 { LoadingConfig.fixVanillaFurnacePollution },
