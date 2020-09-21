@@ -62,10 +62,10 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String) : Boolean = true
 
     override fun acceptTargets(myTargets: Set<String>, otherTargets: Set<String>) {}
-    fun getGTJar() : File? =
+    fun getJar(jarname: String) : File? =
          try {
             File(Launch.minecraftHome, "mods/").listFiles{ file ->
-                file.nameWithoutExtension.contains("gregtech-5.09") && file.extension == ("jar")
+                file.nameWithoutExtension.contains(jarname) && file.extension == ("jar")
             }?.first()!!
         } catch (_: Throwable) {
             null
@@ -74,7 +74,7 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     override fun getMixins(): List<String>? {
         val mixins: MutableList<String> = ArrayList()
 
-        val gtjar = getGTJar()
+        val gtjar = getJar("gregtech-5.09")
 
         loadJar(gtjar)
 
@@ -87,7 +87,6 @@ class ModMixinsPlugin : IMixinConfigPlugin {
                     it.unloadJar()
                 }
         unloadJar(gtjar)
-
         return mixins
     }
 
@@ -137,9 +136,17 @@ class ModMixinsPlugin : IMixinConfigPlugin {
         ),
         EXPLOSION_POLLUTION_ADDITION(
                 "Explosion Pollution Fix",
-                { LoadingConfig.fixExplosionPollution},
+                { LoadingConfig.fixExplosionPollution },
                 arrayOf(
                         "vanilla.world.ExplosionPollutionAdder"
+                )
+        ),
+        ZTONES_PACKAGE_FIX(
+        "Ztones Network Vulnerability",
+                { LoadingConfig.fixZtonesNetworkVulnerability },
+                File(Launch.minecraftHome, "mods/${LoadingConfig.ZtonesJarName}"),
+                arrayOf(
+                    "ztones.network"
                 )
         )
         ;
