@@ -2,6 +2,7 @@ package com.github.bartimaeusnek.modmixins.core
 
 import cpw.mods.fml.common.Loader
 import cpw.mods.fml.common.ModClassLoader
+import net.minecraft.launchwrapper.Launch
 import net.minecraft.launchwrapper.LaunchClassLoader
 import java.io.File
 import java.net.URL
@@ -21,6 +22,16 @@ object ClassPreLoader {
         loader = loaderinstanceField.get(null)
         modClassLoader = modClassLoaderField.get(loader) as ModClassLoader
         mainClassLoader = mainClassLoaderField.get(modClassLoader) as LaunchClassLoader
+    }
+
+    fun getJar(jarname: String) : File? {
+        return try {
+            File(Launch.minecraftHome, "mods/").walkTopDown().filter {
+                file -> file.nameWithoutExtension.contains(jarname) && file.extension == ("jar")
+            }.firstOrNull()
+        } catch (_: Throwable) {
+            null
+        }
     }
 
     @Throws(Exception::class)

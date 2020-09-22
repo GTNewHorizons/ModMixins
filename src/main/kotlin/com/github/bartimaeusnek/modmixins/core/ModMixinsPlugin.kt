@@ -11,6 +11,8 @@ import java.io.FileNotFoundException
 
 class ModMixinsPlugin : IMixinConfigPlugin {
 
+    //private val isDebug = true
+
     companion object {
         const val name = "ModMixinsPlugin"
         val log: Logger = LogManager.getLogger(name)
@@ -62,26 +64,19 @@ class ModMixinsPlugin : IMixinConfigPlugin {
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String) : Boolean = true
 
     override fun acceptTargets(myTargets: Set<String>, otherTargets: Set<String>) {}
-    fun getJar(jarname: String) : File? =
-         try {
-            File(Launch.minecraftHome, "mods/").listFiles{ file ->
-                file.nameWithoutExtension.contains(jarname) && file.extension == ("jar")
-            }?.first()!!
-        } catch (_: Throwable) {
-            null
-        }
 
     override fun getMixins(): List<String>? {
         val mixins: MutableList<String> = ArrayList()
 
-        val gtjar = getJar("gregtech-5.09")
+        val gtjar = ClassPreLoader.getJar("gregtech-5.09")
 
         loadJar(gtjar)
 
         MixinSets.values()
                 .filter(MixinSets::shouldBeLoaded)
                 .forEach {
-                    it.loadJar()
+                    if (/*!isDebug &&*/ !it.loadJar())
+                        return@forEach
                     mixins.addAll(listOf(*it.mixinClasses))
                     log.info("Loading modmixins plugin ${it.fixname} with mixins: {}", it.mixinClasses)
                     it.unloadJar()
@@ -99,12 +94,12 @@ class ModMixinsPlugin : IMixinConfigPlugin {
      * @param jar = the jar of the mod if the jar doesn't contain a core-mod
      * @param mixinClasses = the mixins classes to be applied for this patch
      */
-    enum class MixinSets(val fixname: String, private val applyIf: () -> Boolean, private val jar: File?, val mixinClasses: Array<String>)
+    enum class MixinSets(val fixname: String, private val applyIf: () -> Boolean, private val jar: String?, val mixinClasses: Array<String>)
     {
         RAILCRAFT_BOILER_POLLUTION_FIX (
                 "Railcraft Pollution Fix",
                 { LoadingConfig.fixRailcraftBoilerPollution },
-                File(Launch.minecraftHome, "mods/${LoadingConfig.RailcraftJarName}"),
+                "Railcraft",
                 arrayOf(
                     "railcraft.boiler.RailcraftBoilerPollution",
                     "railcraft.tileentity.MultiOfenPollution",
@@ -114,7 +109,7 @@ class ModMixinsPlugin : IMixinConfigPlugin {
         ROCKET_ADD_POLLUTION (
                 "Rocket Pollution Fix",
                 { LoadingConfig.fixRocketPollution },
-                File(Launch.minecraftHome, "mods/${LoadingConfig.GalacticraftJarName}"),
+                "Galacticraft",
                 arrayOf(
                         "galacticraft.entity.RocketPollutionAdder"
                 )
@@ -144,19 +139,28 @@ class ModMixinsPlugin : IMixinConfigPlugin {
         ZTONES_PACKAGE_FIX(
         "Ztones Network Vulnerability",
                 { LoadingConfig.fixZtonesNetworkVulnerability },
-                File(Launch.minecraftHome, "mods/${LoadingConfig.ZtonesJarName}"),
+                "Ztones",
                 arrayOf(
-                    "ztones.network"
+                    "ztones.network.PackageFix"
                 )
-        )
-        ;
+        );
+
         constructor(fixname: String, applyIf: () -> Boolean, mixinClasses : Array<String>) : this(fixname, applyIf,null, mixinClasses)
-        constructor(fixname: String, applyIf: () -> Boolean, jar: File?, mixinClass : String) : this(fixname, applyIf, jar, arrayOf(mixinClass))
+        constructor(fixname: String, applyIf: () -> Boolean, jar: String?, mixinClass : String) : this(fixname, applyIf, jar, arrayOf(mixinClass))
         constructor(fixname: String, applyIf: () -> Boolean, mixinClass : String) : this(fixname, applyIf,null, mixinClass)
 
         fun shouldBeLoaded() : Boolean = applyIf()
-        fun loadJar() = loadJar(jar)
-        fun unloadJar() = unloadJar(jar)
+        fun loadJar() : Boolean {
+            if (jar == null)
+                return true
+            ClassPreLoader.getJar(jar)?.let {
+                loadJar(it)
+                return true
+            }
+            NullPointerException("Couldn't load $jar! This will cause issues with the following Mixins: ${mixinClasses.joinToString(", ")}").printStackTrace()
+            return false
+        }
+        fun unloadJar() = jar?.let { unloadJar(ClassPreLoader.getJar(it)) }
     }
 
 }

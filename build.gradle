@@ -6,19 +6,24 @@ buildscript {
             url = "http://files.minecraftforge.net/maven"
         }
         maven {
+            name = "jitpack"
+            url = "https://jitpack.io"
+        }
+        maven {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        //Defaults to Java 8 & UTF-8 encoding
+        classpath 'com.github.GTNH2:ForgeGradle:061ac05b6c'
         classpath group: 'com.google.guava', name: 'guava', version: '24.1.1-jre'
     }
 }
 
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.3.0"
-    id "org.jetbrains.kotlin.kapt" version "1.3.0"
+    id "org.jetbrains.kotlin.jvm" version "1.4.10"
+    id "org.jetbrains.kotlin.kapt" version "1.4.10"
 }
 
 apply plugin: 'idea'
@@ -32,11 +37,9 @@ repositories {
     }
 }
 
-version = "0.0.1"
+version = "0.0.2"
 group = "com.github.bartimaeusnek.modmixins"
 archivesBaseName = "modmixins"
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
@@ -60,7 +63,7 @@ dependencies {
 }
 
 jar {
-    appendix = minecraft.version
+    getArchiveAppendix().value("${minecraft.version}")
 }
 
 processResources {
@@ -154,8 +157,7 @@ afterEvaluate {
 
 sourceSets {
     main {
-        //noinspection GrDeprecatedAPIUsage
-        output.resourcesDir = output.classesDir
+        output.resourcesDir = output.getClassesDirs().getFiles().stream().findAny().get()
         ext.refMap = refMapForYourConfig
     }
 }
