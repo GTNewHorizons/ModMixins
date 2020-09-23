@@ -16,7 +16,7 @@ buildscript {
     }
     dependencies {
         //Defaults to Java 8 & UTF-8 encoding
-        classpath 'com.github.GTNH2:ForgeGradle:061ac05b6c'
+        classpath 'com.github.GTNH2:ForgeGradle:48d7763'
         classpath group: 'com.google.guava', name: 'guava', version: '24.1.1-jre'
     }
 }
