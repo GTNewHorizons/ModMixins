@@ -29,7 +29,6 @@ plugins {
 apply plugin: 'idea'
 apply plugin: 'forge'
 
-
 repositories {
     maven {
         name = "gt"
@@ -59,7 +58,6 @@ dependencies {
     compileOnly "thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev"
     compileOnly "com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf"
     compileOnly "micdoodle8.mods:MicdoodleCore:1.7-3.0.12.504:Dev"
-    compileOnly "micdoodle8.mods:GalacticraftCore:1.7-3.0.12.504:Dev"
 }
 
 jar {

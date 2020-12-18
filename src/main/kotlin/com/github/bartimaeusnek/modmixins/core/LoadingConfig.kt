@@ -13,6 +13,7 @@ object LoadingConfig {
         fixExplosionPollution = config["fixes", "fixExplosionPollution", true, "Adds Pollution to every Explosion"].boolean
         fixRocketPollution = config["fixes", "fixRocketPollution", true, "Adds Pollution to every rocket start"].boolean
         fixZtonesNetworkVulnerability = config["fixes", "fixZtonesNetworkVulnerability", true, "Fixes Ztones Network Vulnerability"].boolean
+        fixTimeCommandGc = config["fixes", "fixTimeCommandGc", true, "Fixes GC Time Command without creating lag"].boolean
         rocketPollution = config["options","rocketPollution", 10000, "Pollution when starting per tick, min 1!", 1 , Int.MAX_VALUE].int
         furnacePollution = config["options","furnacePollution", 1, "Pollution per tick, min 1!", 1 , Int.MAX_VALUE].int
         explosionPollution = config["options","explosionPollution", 333.34, "Explosion one time pollution"].double.toFloat()
@@ -22,6 +23,7 @@ object LoadingConfig {
     }
 
     private lateinit var config: Configuration
+    var fixTimeCommandGc : Boolean = false
     var fixRocketPollution : Boolean = false
     var fixRailcraftBoilerPollution : Boolean = false
     var fixVanillaFurnacePollution : Boolean = false

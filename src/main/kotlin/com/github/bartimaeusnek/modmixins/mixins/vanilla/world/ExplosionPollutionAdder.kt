@@ -1,5 +1,6 @@
 package com.github.bartimaeusnek.modmixins.mixins.vanilla.world
 
+import com.github.bartimaeusnek.modmixins.core.LoadingConfig
 import gregtech.common.GT_Pollution
 import net.minecraft.world.Explosion
 import net.minecraft.world.World
@@ -28,6 +29,6 @@ class ExplosionPollutionAdder {
     @Inject(method = ["doExplosionA"], at = [At(value = "TAIL")])
     fun addExplosionPollution(x: CallbackInfo) {
         if (!this.worldObj!!.isRemote)
-            GT_Pollution.addPollution(this.worldObj.getChunkFromBlockCoords(this.explosionX.toInt(), this.explosionZ.toInt()), ceil(explosionSize * 333.334f).toInt())
+            GT_Pollution.addPollution(this.worldObj.getChunkFromBlockCoords(this.explosionX.toInt(), this.explosionZ.toInt()), ceil(explosionSize * LoadingConfig.explosionPollution).toInt())
     }
 }
