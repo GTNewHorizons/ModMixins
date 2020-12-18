@@ -15,8 +15,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath('com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT')
-        classpath(group: 'com.google.guava', name: 'guava', version: '24.1.1-jre')
+        //Defaults to Java 8 & UTF-8 encoding
+        classpath 'com.github.GTNH2:ForgeGradle:FG_1.2-SNAPSHOT'
+        classpath group: 'com.google.guava', name: 'guava', version: '24.1.1-jre'
     }
 }
 
