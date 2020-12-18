@@ -65,7 +65,7 @@ class ModMixinsPlugin : IMixinConfigPlugin {
 
     override fun acceptTargets(myTargets: Set<String>, otherTargets: Set<String>) {}
 
-    override fun getMixins(): List<String>? {
+    override fun getMixins(): List<String> {
         val mixins: MutableList<String> = ArrayList()
 
         val gtjar = ClassPreLoader.getJar("gregtech-5.09")
@@ -112,6 +112,14 @@ class ModMixinsPlugin : IMixinConfigPlugin {
                 "Galacticraft",
                 arrayOf(
                         "galacticraft.entity.RocketPollutionAdder"
+                )
+        ),
+        GC_TIME_COMMAND_FIX_GTNH (
+            "Fix TimeCommand for GC without lag",
+                { LoadingConfig.fixTimeCommandGc },
+            "Galacticraft",
+                arrayOf(
+                    "vanilla.command.TimeCommandGCFix"
                 )
         ),
         FURNACE_ADD_POLLUTION (
