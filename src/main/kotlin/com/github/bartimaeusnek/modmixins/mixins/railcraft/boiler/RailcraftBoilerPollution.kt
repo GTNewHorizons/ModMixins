@@ -26,7 +26,7 @@ class RailcraftBoilerPollution {
             tile?.also {
                 if (!it.world.isRemote)
                     GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
-                        is TileMultiBlock -> it.components.size * 2
+                        is TileMultiBlock -> (it.components.size - x) * 2
                         is TileEngineSteamHobby -> 1
                         else -> 2
                 })
