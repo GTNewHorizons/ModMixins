@@ -24,12 +24,13 @@ class RailcraftBoilerPollution {
     fun tick(x: Int, c: CallbackInfo) {
         if (this.isBurning)
             tile?.also {
-                if (!it.world.isRemote)
+                if (!it.world.isRemote && (it.worldObj.totalWorldTime % 20).toInt() == 0) {
                     GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
-                        is TileMultiBlock -> (it.components.size - x) * 2
-                        is TileEngineSteamHobby -> 1
-                        else -> 2
-                })
+                        is TileMultiBlock -> (it.components.size - x) * 15
+                        is TileEngineSteamHobby -> 20
+                        else -> 40
+                    })
+                }
             }
     }
 }

@@ -76,10 +76,10 @@ object ModMixinsMod {
 
                 if (LoadingConfig.fixRailcraftBoilerPollution && Loader.isModLoaded("Railcraft")) {
                     val multi = "A complete Multiblock "
-                    val boilerPollution = "Produces 40 Pollution/Second"
+                    val boilerPollution = "Produces 15 Pollution/Second per firebox"
                     val steamEnginePollution = "Produces 20 Pollution/Second"
                     val blastFurnacePollution = multi+"produces ${LoadingConfig.furnacePollution * 4 * 20} Pollution/Second"
-                    val cokeOfenPollution = multi+"produces ${LoadingConfig.furnacePollution * 20} Pollution/Second"
+                    val cokeOfenPollution = multi+"produces 3 Pollution/Second"
                     when {
                         GT_Utility.areStacksEqual(it, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal)) -> {
                             event.toolTip += boilerPollution
