@@ -15,7 +15,7 @@ class AlchemicalConstructPollutionAdder : TileEntity() {
 
     @Inject(method = ["updateEntity"], at = [At(value = "FIELD", target = "thaumcraft/common/tiles/TileAlchemyFurnace.furnaceBurnTime:I", opcode = Opcodes.PUTFIELD, remap = false)])
     fun addPollution(c: CallbackInfo) {
-        if (!this.worldObj.isRemote)
+        if (!this.worldObj.isRemote && (this.worldObj.totalWorldTime % 20).toInt() == 0)
             GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePollution)
     }
 

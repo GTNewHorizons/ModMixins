@@ -22,8 +22,8 @@ abstract class MultiOfenPollution(patterns: MutableList<MultiBlockPattern>) : Ti
     fun addPollution(c: CallbackInfo) {
         if (!this.worldObj.isRemote && this.cooking && this.isMaster && (this.worldObj.totalWorldTime % 20).toInt() == 0){
             GT_Pollution.addPollution(this.worldObj.getChunkFromBlockCoords(this.xCoord, this.zCoord), when (this) {
-                is TileBlastFurnace -> LoadingConfig.furnacePollution * 4 * 20
-                else -> 3
+                is TileBlastFurnace -> LoadingConfig.advancedCokeOvenPollution
+                else -> LoadingConfig.cokeOvenPollution
             })
         }
     }
