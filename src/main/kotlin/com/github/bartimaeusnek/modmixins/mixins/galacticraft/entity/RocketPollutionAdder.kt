@@ -16,11 +16,11 @@ abstract class RocketPollutionAdder(world: World) : EntityAutoRocket(world), IRo
 
     @Inject(method = ["onUpdate"],at =  [At("HEAD")])
     fun addRocketStartPollution(x: CallbackInfo) {
-        if (!this.worldObj.isRemote && (this.launchPhase == EnumLaunchPhase.LAUNCHED.ordinal || this.launchPhase == EnumLaunchPhase.IGNITED.ordinal)){
+        if (!this.worldObj.isRemote && (this.launchPhase == EnumLaunchPhase.LAUNCHED.ordinal || this.launchPhase == EnumLaunchPhase.IGNITED.ordinal) && (this.worldObj.totalWorldTime % 20).toInt() == 0){
              GT_Pollution.addPollution(this.worldObj.getChunkFromBlockCoords(this.posX.toInt(),this.posZ.toInt()),
                      when (this.launchPhase){
-                         EnumLaunchPhase.LAUNCHED.ordinal -> (LoadingConfig.rocketPollution shl this.rocketTier) / 20
-                         EnumLaunchPhase.IGNITED.ordinal -> (LoadingConfig.rocketPollution shl this.rocketTier) / 20 / 100
+                         EnumLaunchPhase.LAUNCHED.ordinal -> (LoadingConfig.rocketPollution shl (this.rocketTier - 1))
+                         EnumLaunchPhase.IGNITED.ordinal -> (LoadingConfig.rocketPollution shl (this.rocketTier - 1)) / 100
                          else -> 0
                      }
              )

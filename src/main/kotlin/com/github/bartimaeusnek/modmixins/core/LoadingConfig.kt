@@ -14,9 +14,13 @@ object LoadingConfig {
         fixRocketPollution = config["fixes", "fixRocketPollution", true, "Adds Pollution to every rocket start"].boolean
         fixZtonesNetworkVulnerability = config["fixes", "fixZtonesNetworkVulnerability", true, "Fixes Ztones Network Vulnerability"].boolean
         fixTimeCommandGc = config["fixes", "fixTimeCommandGc", true, "Fixes GC Time Command without creating lag"].boolean
-        rocketPollution = config["options","rocketPollution", 10000, "Pollution when starting per tick, min 1!", 1 , Int.MAX_VALUE].int
-        furnacePollution = config["options","furnacePollution", 1, "Pollution per tick, min 1!", 1 , Int.MAX_VALUE].int
+        rocketPollution = config["options","rocketPollution", 10000, "Pollution when starting per second, min 1!", 1 , Int.MAX_VALUE].int
+        furnacePollution = config["options","furnacePollution", 20, "Furnace pollution per second, min 1!", 1 , Int.MAX_VALUE].int
         explosionPollution = config["options","explosionPollution", 333.34, "Explosion one time pollution"].double.toFloat()
+        cokeOvenPollution = config["options", "cokeOvenPollution", 3, "Coke oven pollution per second, min 1!", 1, Int.MAX_VALUE].int
+        advancedCokeOvenPollution = config["options", "advancedCokeOvenPollution", 80, "Advanced coke oven pollution per second, min 1!", 1, Int.MAX_VALUE].int
+        fireboxPollution = config["options", "fireboxPollution", 15, "Railcraft boiler firebox pollution per second, min 1!", 1, Int.MAX_VALUE].int
+        hobbyistEnginePollution = config ["options", "hobbyistEnginePollution", 20, "Hobbyist's steam engine pollution per second, min 1!", 1, Int.MAX_VALUE].int
 
         if (config.hasChanged())
             config.save()
@@ -30,7 +34,11 @@ object LoadingConfig {
     var fixThaumcraftFurnacePollution : Boolean = false
     var fixExplosionPollution : Boolean = false
     var fixZtonesNetworkVulnerability : Boolean = false
-    var furnacePollution : Int = 1
+    var furnacePollution : Int = 20
     var rocketPollution : Int = 1
     var explosionPollution : Float = 333.34f
+    var cokeOvenPollution : Int = 3;
+    var fireboxPollution : Int = 15;
+    var advancedCokeOvenPollution: Int = 80;
+    var hobbyistEnginePollution: Int = 20;
 }
