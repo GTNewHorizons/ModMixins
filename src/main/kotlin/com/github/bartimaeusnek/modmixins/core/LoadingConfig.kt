@@ -37,8 +37,8 @@ object LoadingConfig {
     var furnacePollution : Int = 20
     var rocketPollution : Int = 1
     var explosionPollution : Float = 333.34f
-    var cokeOvenPollution : Int = 3;
-    var fireboxPollution : Int = 15;
+    var cokeOvenPollution : Int = 20;
+    var fireboxPollution : Int = 40;
     var advancedCokeOvenPollution: Int = 80;
     var hobbyistEnginePollution: Int = 20;
 }
