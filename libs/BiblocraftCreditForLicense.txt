@@ -1,0 +1,11 @@
+[...]unless included in a mod pack consisting of two or more mods. In the case of mod packs, all I ask is that proper
+credit is given to myself, the OWNER, for any of my works used and a link is provided so all recipients of said mod pack
+can easily access my website. (http://www.bibliocraftmod.com) [...]
+
+(This libs folder is basically dev-modpack.)
+
+[...]Use of this MOD to be installed, manually or automatically, is given to the USER without restriction.[...]
+
+(No restriction? Great! That means i can install this mod in this dev-modpack.)
+
+http://www.bibliocraftmod.com
