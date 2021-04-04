@@ -13,6 +13,7 @@ object LoadingConfig {
         fixExplosionPollution = config["fixes", "fixExplosionPollution", true, "Adds Pollution to every Explosion"].boolean
         fixRocketPollution = config["fixes", "fixRocketPollution", true, "Adds Pollution to every rocket start"].boolean
         fixZtonesNetworkVulnerability = config["fixes", "fixZtonesNetworkVulnerability", true, "Fixes Ztones Network Vulnerability"].boolean
+        fixBibliocraftNetworkVulnerability = config["fixes", "fixBibliocraftNetworkVulnerability", true, "Fixes Bibliocraft Network Vulnerability"].boolean
         fixTimeCommandGc = config["fixes", "fixTimeCommandGc", true, "Fixes GC Time Command without creating lag"].boolean
         rocketPollution = config["options","rocketPollution", 10000, "Pollution when starting per second, min 1!", 1 , Int.MAX_VALUE].int
         furnacePollution = config["options","furnacePollution", 20, "Furnace pollution per second, min 1!", 1 , Int.MAX_VALUE].int
@@ -34,11 +35,12 @@ object LoadingConfig {
     var fixThaumcraftFurnacePollution : Boolean = false
     var fixExplosionPollution : Boolean = false
     var fixZtonesNetworkVulnerability : Boolean = false
+    var fixBibliocraftNetworkVulnerability : Boolean = false
     var furnacePollution : Int = 20
     var rocketPollution : Int = 1
     var explosionPollution : Float = 333.34f
-    var cokeOvenPollution : Int = 20;
-    var fireboxPollution : Int = 40;
-    var advancedCokeOvenPollution: Int = 80;
-    var hobbyistEnginePollution: Int = 20;
+    var cokeOvenPollution : Int = 20
+    var fireboxPollution : Int = 40
+    var advancedCokeOvenPollution: Int = 80
+    var hobbyistEnginePollution: Int = 20
 }

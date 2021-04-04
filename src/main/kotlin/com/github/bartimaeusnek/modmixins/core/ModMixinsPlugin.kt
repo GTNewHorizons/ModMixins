@@ -144,6 +144,14 @@ class ModMixinsPlugin : IMixinConfigPlugin {
                         "vanilla.world.ExplosionPollutionAdder"
                 )
         ),
+        BIBLIOCRAFT_PACKAGE_FIX(
+                "BiblioCraft Network Vulnerability",
+                { LoadingConfig.fixBibliocraftNetworkVulnerability },
+                "BiblioCraft",
+                arrayOf(
+                        "bibliocraft.network.PackageFix"
+                )
+        ),
         ZTONES_PACKAGE_FIX(
         "Ztones Network Vulnerability",
                 { LoadingConfig.fixZtonesNetworkVulnerability },

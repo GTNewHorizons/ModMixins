@@ -24,6 +24,8 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.player.ItemTooltipEvent
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import thaumcraft.api.ItemApi
 import java.text.NumberFormat
 
@@ -38,7 +40,7 @@ object ModMixinsMod {
     const val DEPENDENCIES = "required-after:spongemixins;" +
                                     "required-after:forgelin;" +
                                     "required-after:gregtech;"
-
+    val log: Logger = LogManager.getLogger(NAME)
 
     @Mod.EventHandler
     fun preinit(init : FMLPreInitializationEvent) {
