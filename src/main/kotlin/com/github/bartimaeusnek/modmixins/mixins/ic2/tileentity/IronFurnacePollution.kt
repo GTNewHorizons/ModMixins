@@ -18,7 +18,7 @@ class IronFurnacePollution : TileEntity() {
 
     @Inject(method = ["updateEntityServer"], at = [At(value = "TAIL")])
     fun updateEntityServer(c: CallbackInfo) {
-        if (!this.worldObj.isRemote && this.isBurning()) {
+        if (!this.worldObj.isRemote && this.isBurning() && (this.worldObj.totalWorldTime % 20).toInt() == 0) {
             GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePollution)
         }
     }

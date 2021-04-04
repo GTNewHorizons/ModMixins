@@ -1,5 +1,6 @@
 package com.github.bartimaeusnek.modmixins.mixins.railcraft.boiler
 
+import com.github.bartimaeusnek.modmixins.core.LoadingConfig
 import gregtech.common.GT_Pollution
 import mods.railcraft.common.blocks.RailcraftTileEntity
 import mods.railcraft.common.blocks.machine.TileMultiBlock
@@ -24,12 +25,13 @@ class RailcraftBoilerPollution {
     fun tick(x: Int, c: CallbackInfo) {
         if (this.isBurning)
             tile?.also {
-                if (!it.world.isRemote)
+                if (!it.world.isRemote && (it.worldObj.totalWorldTime % 20).toInt() == 0) {
                     GT_Pollution.addPollution(it.world.getChunkFromBlockCoords(it.x, it.z), when (it) {
-                        is TileMultiBlock -> it.components.size * 2
-                        is TileEngineSteamHobby -> 1
-                        else -> 2
-                })
+                        is TileMultiBlock -> (it.components.size - x) * LoadingConfig.fireboxPollution
+                        is TileEngineSteamHobby -> LoadingConfig.hobbyistEnginePollution
+                        else -> 40
+                    })
+                }
             }
     }
 }

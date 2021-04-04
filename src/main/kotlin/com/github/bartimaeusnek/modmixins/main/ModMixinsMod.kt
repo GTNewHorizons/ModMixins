@@ -57,7 +57,7 @@ object ModMixinsMod {
             event?.itemStack?.also{
 
                 if (LoadingConfig.fixVanillaFurnacePollution){
-                    val furnacePollution = "Produces ${LoadingConfig.furnacePollution*20} Pollution/Second"
+                    val furnacePollution = "Produces ${LoadingConfig.furnacePollution} Pollution/Second"
                     when {
                         GT_Utility.areStacksEqual(it, ItemStack(Blocks.furnace)) -> {
                             event.toolTip += furnacePollution
@@ -76,10 +76,10 @@ object ModMixinsMod {
 
                 if (LoadingConfig.fixRailcraftBoilerPollution && Loader.isModLoaded("Railcraft")) {
                     val multi = "A complete Multiblock "
-                    val boilerPollution = "Produces 40 Pollution/Second"
-                    val steamEnginePollution = "Produces 20 Pollution/Second"
-                    val blastFurnacePollution = multi+"produces ${LoadingConfig.furnacePollution * 4 * 20} Pollution/Second"
-                    val cokeOfenPollution = multi+"produces ${LoadingConfig.furnacePollution * 20} Pollution/Second"
+                    val boilerPollution = "Produces ${LoadingConfig.fireboxPollution} Pollution/Second per firebox"
+                    val steamEnginePollution = "Produces ${LoadingConfig.hobbyistEnginePollution} Pollution/Second"
+                    val blastFurnacePollution = multi+"produces ${LoadingConfig.advancedCokeOvenPollution} Pollution/Second"
+                    val cokeOfenPollution = multi+"produces ${LoadingConfig.cokeOvenPollution} Pollution/Second"
                     when {
                         GT_Utility.areStacksEqual(it, ItemStack(RailcraftBlocks.getBlockMachineBeta(), 1, EnumMachineBeta.BOILER_FIREBOX_SOLID.ordinal)) -> {
                             event.toolTip += boilerPollution
@@ -106,8 +106,8 @@ object ModMixinsMod {
                     it.item::class.simpleName?.also { spln ->
                         if (spln.contains("Rocket")){
                             spln.find{d -> d.isDigit()}?.also { num ->
-                                event.toolTip += "Produces ${NumberFormat.getNumberInstance().format((LoadingConfig.rocketPollution shl Character.getNumericValue(num)) / 100)} Pollution/Second when ignited"
-                                event.toolTip += "Produces ${NumberFormat.getNumberInstance().format((LoadingConfig.rocketPollution shl Character.getNumericValue(num)))} Pollution/Second when flying"
+                                event.toolTip += "Produces ${NumberFormat.getNumberInstance().format((LoadingConfig.rocketPollution shl (Character.getNumericValue(num) - 1)) / 100)} Pollution/Second when ignited"
+                                event.toolTip += "Produces ${NumberFormat.getNumberInstance().format(LoadingConfig.rocketPollution shl (Character.getNumericValue(num) - 1))} Pollution/Second when flying"
                             }
                         }
                     }

@@ -15,7 +15,7 @@ class TileEntityFurnacePollution : TileEntity() {
 
     @Inject(method = ["updateEntity"], at = [At(value = "FIELD", target = "net/minecraft/tileentity/TileEntityFurnace.furnaceBurnTime:I", opcode = PUTFIELD)])
     fun addPollution(c: CallbackInfo){
-        if (!this.worldObj.isRemote)
+        if (!this.worldObj.isRemote && (this.worldObj.totalWorldTime % 20).toInt() == 0)
             GT_Pollution.addPollution(this.worldObj!!.getChunkFromBlockCoords(this.xCoord, this.zCoord), LoadingConfig.furnacePollution)
     }
 }
